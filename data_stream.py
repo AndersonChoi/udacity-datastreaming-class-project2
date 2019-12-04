@@ -64,6 +64,7 @@ def run_spark_job(spark):
     agg_df = distinct_table \
         .dropna() \
         .select("original_crime_type_name") \
+        .withWatermark("call_datetime", "60 minutes") \
         .groupby("original_crime_type_name") \
         .agg({"original_crime_type_name" : "count"}) \
         .orderBy("count(original_crime_type_name)", ascending=False)
